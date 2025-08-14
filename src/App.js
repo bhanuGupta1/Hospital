@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import { Stethoscope, HeartPulse, Baby, Syringe, Calendar, Phone, MapPin, Star, Instagram, Facebook, MessageCircle, Clock, Award, Users, Heart } from "lucide-react";
 
-// ---- Replace these with your real image URLs ----
-const MOM_PHOTO = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3";
-const DAD_PHOTO = "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3";
-const HOSPITAL_PHOTO = "https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3";
+// ---- REPLACE THESE URLs WITH YOUR REAL PHOTOS ----
+// To add your real photos:
+// 1. Upload photos to Google Drive or any image hosting service
+// 2. Get the direct image URLs
+// 3. Replace the URLs below
+const MOM_PHOTO = ""; // Add Dr. Shelly's photo URL here
+const DAD_PHOTO = ""; // Add Dr. Rakesh's photo URL here  
+const HOSPITAL_PHOTO = "https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=1200&auto=format&fit=crop";
 
 // Reviews with English text and Punjabi cultural elements
 const reviews = [
@@ -121,7 +125,13 @@ const Section = ({ id, title, subtitle, children, punjabi }) => (
 const DoctorCard = ({ photo, name, title, points, experience, punjabi }) => (
   <div className="bg-white rounded-2xl shadow-lg border hover:shadow-xl transition-shadow p-6">
     <div className="flex items-center gap-4 mb-4">
-      <img src={photo} alt={name} className="w-24 h-24 rounded-2xl object-cover border-2 border-blue-100" />
+      {photo ? (
+        <img src={photo} alt={name} className="w-24 h-24 rounded-2xl object-cover border-2 border-blue-100" />
+      ) : (
+        <div className="w-24 h-24 rounded-2xl bg-blue-100 border-2 border-blue-200 flex items-center justify-center">
+          <Stethoscope className="w-12 h-12 text-blue-600" />
+        </div>
+      )}
       <div>
         <h3 className="text-xl font-bold text-gray-900">{name}</h3>
         <p className="text-blue-600 font-medium">{title}</p>
@@ -162,14 +172,37 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Appointment request submitted! ਅਸੀਂ ਜਲਦੀ ਸੰਪਰਕ ਕਰਾਂਗੇ!');
+    
+    // Create WhatsApp message
+    const whatsappMessage = `🏥 *Jeevan Jyoti Hospital - Appointment Request*
+
+👤 *Name:* ${formData.name}
+📞 *Phone:* ${formData.phone}
+📍 *City:* ${formData.city}
+🏥 *Service:* ${formData.service}
+
+💬 *Message:*
+${formData.message || 'No additional message'}
+
+---
+ਮੁਲਾਕਾਤ ਦੀ ਬੇਨਤੀ - Please confirm appointment time.`;
+
+    // WhatsApp number for Jeevan Jyoti Hospital
+    const hospitalWhatsApp = "919815185617"; // Updated with correct number
+    
+    // Create WhatsApp URL
+    const whatsappURL = `https://wa.me/${hospitalWhatsApp}?text=${encodeURIComponent(whatsappMessage)}`;
+    
+    // Open WhatsApp
+    window.open(whatsappURL, '_blank');
     
     // Reset form
     setFormData({
       name: '', phone: '', city: '', service: '', message: ''
     });
+    
+    // Show success message
+    alert('Redirecting to WhatsApp! ਵਟਸਐਪ ਤੇ ਭੇਜ ਰਹੇ ਹਾਂ!');
   };
 
   const handleChange = (e) => {
@@ -237,9 +270,10 @@ const ContactForm = () => {
         
         <button 
           type="submit"
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
         >
-          Request Appointment (ਮੁਲਾਕਾਤ ਮੰਗਣੀ ਏ)
+          <MessageCircle className="w-5 h-5" />
+          Send via WhatsApp (ਵਟਸਐਪ ਰਾਹੀਂ ਭੇਜੋ)
         </button>
         
         <p className="text-xs text-gray-500">
@@ -474,7 +508,7 @@ export default function JeevanJyotiHospitalSite() {
                 </a>
                 
                 <a 
-                  href="https://wa.me/919815185617" 
+                  href="https://wa.me/919815185617?text=Hello%20Dr.%20Shelly%20ji,%20I%20would%20like%20to%20book%20an%20appointment.%20ਸਤ%20ਸ੍ਰੀ%20ਅਕਾਲ!" 
                   className="flex items-center gap-3 p-3 rounded-xl border hover:bg-green-50 transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 text-green-600" />
@@ -503,31 +537,24 @@ export default function JeevanJyotiHospitalSite() {
             </div>
             
             <div className="bg-white rounded-2xl border shadow-lg p-4">
-              <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-500">Interactive Map</p>
-                  <p className="text-sm text-gray-400">Bengali Wali Gali, Bathinda</p>
-                </div>
+              <div className="aspect-video w-full rounded-xl overflow-hidden">
+                <iframe 
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3448.066696247877!2d74.9452094!3d30.206643800000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391732a1eee78fb9%3A0x3c9def9de3e45aeb!2sJeevan%20Jyoti%20Hospital%20%E2%80%93%20Obstetrics%2C%20Gynecology%20%26%20Infertility%20Care!5e0!3m2!1sen!2snz!4v1755137701152!5m2!1sen!2snz" 
+                  className="w-full h-full rounded-xl"
+                  style={{ border: 0 }} 
+                  allowFullScreen="" 
+                  loading="lazy" 
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Jeevan Jyoti Hospital Location"
+                />
+              </div>
+              <div className="mt-3 text-center">
+                <p className="text-sm text-gray-600">📍 Jeevan Jyoti Hospital - Bengali Wali Gali, Bathinda</p>
+                <p className="text-xs text-orange-600">ਜੀਵਨ ਜੋਤੀ ਹਸਪਤਾਲ - ਬੰਗਾਲੀ ਵਾਲੀ ਗਲੀ, ਬਠਿੰਡਾ</p>
               </div>
             </div>
             
-            <div className="flex gap-4">
-              <a 
-                href="#" 
-                className="p-3 rounded-xl border hover:bg-pink-50 transition-colors"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-6 h-6 text-pink-600" />
-              </a>
-              <a 
-                href="#" 
-                className="p-3 rounded-xl border hover:bg-blue-50 transition-colors"
-                aria-label="Facebook"
-              >
-                <Facebook className="w-6 h-6 text-blue-600" />
-              </a>
-            </div>
+            
           </div>
         </div>
       </Section>
