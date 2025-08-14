@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Stethoscope, HeartPulse, Baby, Syringe, Calendar, Phone, MapPin, Star, Instagram, Facebook, MessageCircle, Clock, Award, Users, Heart } from "lucide-react";
-import './index.css';
 
 // ---- Replace these with your real image URLs ----
-const MOM_PHOTO = "https://images.unsplash.com/photo-1550831107-1553da8c8464?q=80&w=1200&auto=format&fit=crop";
-const DAD_PHOTO = "https://images.unsplash.com/photo-1551190822-a9333d879b1f?q=80&w=1200&auto=format&fit=crop";
-const HOSPITAL_PHOTO = "https://images.unsplash.com/photo-1584982751601-97dcc096659c?q=80&w=1200&auto=format&fit=crop";
+const MOM_PHOTO = "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3";
+const DAD_PHOTO = "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3";
+const HOSPITAL_PHOTO = "https://images.unsplash.com/photo-1538108149393-fbbd81895907?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3";
 
 // Reviews with English text and Punjabi cultural elements
 const reviews = [
@@ -161,10 +160,16 @@ const ContactForm = () => {
     name: '', phone: '', city: '', service: '', message: ''
   });
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     // Handle form submission here
     console.log('Form submitted:', formData);
     alert('Appointment request submitted! ਅਸੀਂ ਜਲਦੀ ਸੰਪਰਕ ਕਰਾਂਗੇ!');
+    
+    // Reset form
+    setFormData({
+      name: '', phone: '', city: '', service: '', message: ''
+    });
   };
 
   const handleChange = (e) => {
@@ -172,73 +177,82 @@ const ContactForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-2xl border shadow-lg p-6 space-y-4">
+    <div className="bg-white rounded-2xl border shadow-lg p-6">
       <h3 className="text-xl font-bold text-gray-900 mb-4">Book Your Consultation</h3>
       <p className="text-sm text-orange-600 mb-4">ਮੁਲਾਕਾਤ ਬੁੱਕ ਕਰੋ</p>
       
-      <div className="grid sm:grid-cols-2 gap-4">
-        <input 
-          name="name"
-          value={formData.name}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input 
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-gray-300 p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+            placeholder="Full Name (ਪੂਰਾ ਨਾਮ)" 
+            required
+          />
+          <input 
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-gray-300 p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+            placeholder="Phone Number (ਫੋਨ ਨੰਬਰ)" 
+            type="tel"
+            required
+          />
+        </div>
+        
+        <div className="grid sm:grid-cols-2 gap-4">
+          <input 
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-gray-300 p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+            placeholder="City / Area (ਸ਼ਹਿਰ)" 
+            required
+          />
+          <select 
+            name="service"
+            value={formData.service}
+            onChange={handleChange}
+            className="w-full rounded-xl border border-gray-300 p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            required
+          >
+            <option value="">Select Service (ਸੇਵਾ ਚੁਣੋ)</option>
+            <option value="infertility">Infertility Treatment</option>
+            <option value="pregnancy">Pregnancy Care</option>
+            <option value="ultrasound">Ultrasound</option>
+            <option value="family-planning">Family Planning</option>
+            <option value="womens-health">Women's Health</option>
+          </select>
+        </div>
+        
+        <textarea 
+          name="message"
+          value={formData.message}
           onChange={handleChange}
-          className="input" 
-          placeholder="Full Name (ਪੂਰਾ ਨਾਮ)" 
+          className="w-full rounded-xl border border-gray-300 p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all min-h-[100px]" 
+          placeholder="Describe your concern (ਆਪਣੀ ਸਮੱਸਿਆ ਦੱਸੋ)" 
         />
-        <input 
-          name="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          className="input" 
-          placeholder="Phone Number (ਫੋਨ ਨੰਬਰ)" 
-        />
-      </div>
-      
-      <div className="grid sm:grid-cols-2 gap-4">
-        <input 
-          name="city"
-          value={formData.city}
-          onChange={handleChange}
-          className="input" 
-          placeholder="City / Area (ਸ਼ਹਿਰ)" 
-        />
-        <select 
-          name="service"
-          value={formData.service}
-          onChange={handleChange}
-          className="input"
+        
+        <button 
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
         >
-          <option value="">Select Service (ਸੇਵਾ ਚੁਣੋ)</option>
-          <option value="infertility">Infertility Treatment</option>
-          <option value="pregnancy">Pregnancy Care</option>
-          <option value="ultrasound">Ultrasound</option>
-          <option value="family-planning">Family Planning</option>
-          <option value="womens-health">Women's Health</option>
-        </select>
-      </div>
-      
-      <textarea 
-        name="message"
-        value={formData.message}
-        onChange={handleChange}
-        className="input min-h-[100px]" 
-        placeholder="Describe your concern (ਆਪਣੀ ਸਮੱਸਿਆ ਦੱਸੋ)" 
-      />
-      
-      <button 
-        onClick={handleSubmit}
-        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
-      >
-        Request Appointment (ਮੁਲਾਕਾਤ ਮੰਗਣੀ ਏ)
-      </button>
-      
-      <p className="text-xs text-gray-500">
-        By submitting, you agree to be contacted for scheduling. ਪ੍ਰਾਈਵੇਸੀ ਦੀ ਪੂਰੀ ਸੁਰੱਖਿਆ ਕਰਾਂਗੇ।
-      </p>
+          Request Appointment (ਮੁਲਾਕਾਤ ਮੰਗਣੀ ਏ)
+        </button>
+        
+        <p className="text-xs text-gray-500">
+          By submitting, you agree to be contacted for scheduling. ਪ੍ਰਾਈਵੇਸੀ ਦੀ ਪੂਰੀ ਸੁਰੱਖਿਆ ਕਰਾਂਗੇ।
+        </p>
+      </form>
     </div>
   );
 };
 
 export default function JeevanJyotiHospitalSite() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-orange-50">
       {/* Header */}
@@ -250,7 +264,7 @@ export default function JeevanJyotiHospitalSite() {
             </div>
             <div>
               <span className="font-bold text-xl text-gray-900">Jeevan Jyoti Hospital</span>
-              <p className="text-xs text-orange-600">ਸਤ ਸ੍ਰੀ ਅਕਾਲ - ਸੇਵਾ ਦੀ ਭਾਵਨਾ</p>
+              <p className="text-xs text-orange-600">ਜੀਵਨ ਜੋਤੀ ਹਸਪਤਾਲ</p>
             </div>
           </div>
           
@@ -261,14 +275,40 @@ export default function JeevanJyotiHospitalSite() {
             <a href="#contact" className="text-gray-700 hover:text-blue-600 font-medium transition-colors">Contact</a>
           </nav>
           
-          <a 
-            href="#contact" 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2"
-          >
-            <Calendar className="w-4 h-4" /> 
-            Book Now
-          </a>
+          <div className="flex items-center gap-2">
+            <a 
+              href="#contact" 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium transition-colors flex items-center gap-2"
+            >
+              <Calendar className="w-4 h-4" /> 
+              Book Now
+            </a>
+            
+            {/* Mobile menu button */}
+            <button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg border border-gray-300"
+            >
+              <div className="w-6 h-6 flex flex-col justify-center items-center">
+                <span className={`bg-gray-600 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${mobileMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-0.5'}`}></span>
+                <span className={`bg-gray-600 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+                <span className={`bg-gray-600 block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm ${mobileMenuOpen ? '-rotate-45 -translate-y-1' : 'translate-y-0.5'}`}></span>
+              </div>
+            </button>
+          </div>
         </div>
+        
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-white border-t">
+            <nav className="flex flex-col space-y-2 p-4">
+              <a href="#services" className="text-gray-700 hover:text-blue-600 font-medium transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Services</a>
+              <a href="#doctors" className="text-gray-700 hover:text-blue-600 font-medium transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Doctors</a>
+              <a href="#reviews" className="text-gray-700 hover:text-blue-600 font-medium transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Reviews</a>
+              <a href="#contact" className="text-gray-700 hover:text-blue-600 font-medium transition-colors py-2" onClick={() => setMobileMenuOpen(false)}>Contact</a>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
@@ -294,7 +334,7 @@ export default function JeevanJyotiHospitalSite() {
                 Book Consultation
               </a>
               <a 
-                href="tel:+91XXXXXXXXXX" 
+                href="tel:+919815185617" 
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-8 py-4 rounded-xl font-semibold text-lg transition-colors flex items-center gap-2"
               >
                 <Phone className="w-5 h-5" /> 
@@ -423,18 +463,18 @@ export default function JeevanJyotiHospitalSite() {
               
               <div className="space-y-4">
                 <a 
-                  href="tel:+91XXXXXXXXXX" 
+                  href="tel:+919815185617" 
                   className="flex items-center gap-3 p-3 rounded-xl border hover:bg-blue-50 transition-colors"
                 >
                   <Phone className="w-5 h-5 text-blue-600" />
                   <div>
-                    <p className="font-medium">+91 XXXXXXXXXX</p>
+                    <p className="font-medium">+91 98151 85617</p>
                     <p className="text-sm text-gray-600">Call for immediate assistance</p>
                   </div>
                 </a>
                 
                 <a 
-                  href="https://wa.me/91XXXXXXXXXX" 
+                  href="https://wa.me/919815185617" 
                   className="flex items-center gap-3 p-3 rounded-xl border hover:bg-green-50 transition-colors"
                 >
                   <MessageCircle className="w-5 h-5 text-green-600" />
@@ -463,14 +503,12 @@ export default function JeevanJyotiHospitalSite() {
             </div>
             
             <div className="bg-white rounded-2xl border shadow-lg p-4">
-              <div className="aspect-video w-full rounded-xl overflow-hidden">
-                <iframe
-                  title="Hospital Location"
-                  className="w-full h-full"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3509.6805!2d74.95!3d30.21!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2sJeevan%20Jyoti%20Hospital!5e0!3m2!1sen!2sin!4v0000000000"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                />
+              <div className="aspect-video w-full rounded-xl overflow-hidden bg-gray-100 flex items-center justify-center">
+                <div className="text-center">
+                  <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-gray-500">Interactive Map</p>
+                  <p className="text-sm text-gray-400">Bengali Wali Gali, Bathinda</p>
+                </div>
               </div>
             </div>
             
@@ -478,12 +516,14 @@ export default function JeevanJyotiHospitalSite() {
               <a 
                 href="#" 
                 className="p-3 rounded-xl border hover:bg-pink-50 transition-colors"
+                aria-label="Instagram"
               >
                 <Instagram className="w-6 h-6 text-pink-600" />
               </a>
               <a 
                 href="#" 
                 className="p-3 rounded-xl border hover:bg-blue-50 transition-colors"
+                aria-label="Facebook"
               >
                 <Facebook className="w-6 h-6 text-blue-600" />
               </a>
@@ -536,7 +576,7 @@ export default function JeevanJyotiHospitalSite() {
               <div className="space-y-2 text-gray-300">
                 <p>Bengali Wali Gali, Bathinda</p>
                 <p>Punjab, India</p>
-                <p>Phone: +91 XXXXXXXXXX</p>
+                <p>Phone: +91 98151 85617</p>
                 <p className="text-orange-300">ਸੇਵਾ ਵਿੱਚ ਸਮਰਪਿਤ</p>
               </div>
             </div>
@@ -547,12 +587,6 @@ export default function JeevanJyotiHospitalSite() {
           </div>
         </div>
       </footer>
-
-      <style>{`
-        .input { 
-          @apply w-full rounded-xl border border-gray-300 p-3 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all; 
-        }
-      `}</style>
     </div>
   );
 }
